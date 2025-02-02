@@ -1,12 +1,8 @@
-// Firebase Configuration (Replace with your Firebase config)
-// Import the functions you need from the SDKs you need
+// Import required functions from Firebase SDK v9+ (modular)
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCWAE4wwJ7I4nraZ34f8U7i4kGLjFHhX2I",
   authDomain: "love-c113f.firebaseapp.com",
@@ -17,65 +13,53 @@ const firebaseConfig = {
   measurementId: "G-9Y8NT7G9Z1"
 };
 
-
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // Save User's Name
 document.getElementById("saveName").addEventListener("click", function () {
-    let userName = document.getElementById("nameInput").value.trim();
-    
-    if (userName !== "") {
-        localStorage.setItem("savedName", userName);
-        document.getElementById("savedName").innerHTML = "Saved Name: " + userName;
-        alert("Your name has been saved! ✅");
-    } else {
-        alert("Please enter your name! ⚠️");
-    }
+  let userName = document.getElementById("nameInput").value.trim();
+
+  if (userName !== "") {
+    // Save the name to localStorage and display the saved name
+    localStorage.setItem("savedName", userName);
+    document.getElementById("savedName").innerHTML = "Saved Name: " + userName;
+    alert("Your name has been saved! ✅");
+  } else {
+    alert("Please enter your name! ⚠️");
+  }
 });
 
-// Function to Save Yes/No Response to Firebase
-function saveResponse(response) {
-    let userName = localStorage.getItem("savedName") || "Anonymous";
+// Function to Save Yes/No Response to Firestore
+async function saveResponse(response) {
+  let userName = localStorage.getItem("savedName") || "Anonymous"; // Get the saved name from localStorage
 
-    db.collection("responses").add({
-        name: userName,
-        answer: response,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
-        console.log("Response Saved!");
-    }).catch(error => {
-        console.error("Error saving response: ", error);
+  try {
+    // Save the response in Firestore
+    await addDoc(collection(db, "responses"), {
+      name: userName,
+      answer: response,
+      timestamp: serverTimestamp() // Save the current timestamp
     });
+    console.log("Response Saved!");
+  } catch (error) {
+    console.error("Error saving response: ", error);
+  }
 }
 
-// Handle Yes Click - Display "Love you too ❤️"
+// Handle Yes Click (Display Love and Save Response)
 document.getElementById("yes").addEventListener("click", function () {
-    // Display "Love you too ❤️" message
-    document.getElementById("response").innerHTML = "Love you too ❤️";
-
-    // Save the "Yes" response to Firebase
-    saveResponse("Yes 💖");
-
-    // Display the saved name
-    let userName = localStorage.getItem("savedName");
-    if (userName) {
-        document.getElementById("savedName").innerHTML = "Saved Name: " + userName;
-    }
+  // Show "Love you too" message
+  document.getElementById("response").innerHTML = "Love you too ❤️";
+  // Save the response to Firestore
+  saveResponse("Yes 💖");
 });
 
-// Handle No Click - Display "Try again 💔"
+// Handle No Click (Display Try Again and Save Response)
 document.getElementById("no").addEventListener("click", function () {
-    // Display "Try again 💔" message
-    document.getElementById("response").innerHTML = "Try again 💔";
-
-    // Save the "No" response to Firebase
-    saveResponse("No 💔");
-
-    // Display the saved name
-    let userName = localStorage.getItem("savedName");
-    if (userName) {
-        document.getElementById("savedName").innerHTML = "Saved Name: " + userName;
-    }
+  // Show "Think again" message
+  document.getElementById("response").innerHTML = "Think again... 💔";
+  // Save the response to Firestore
+  saveResponse("No 💔");
 });
