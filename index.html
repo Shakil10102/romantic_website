@@ -10,11 +10,22 @@
     <div class="container">
         <h1>Do you love me? ❤️</h1>
         <p class="romantic-message">"You are the light of my life, my sunshine on a cloudy day..."</p>
+        
+        <!-- Name Input Section -->
+        <label for="nameInput">Enter your name:</label>
+        <input type="text" id="nameInput" placeholder="Your Name">
+        <button id="saveName">OK ✅</button>
+        
+        <p id="savedName"></p> <!-- Displays the saved name -->
+
+        <!-- Yes/No Buttons -->
         <div class="buttons">
             <button id="yes">Yes 💖</button>
             <button id="no">No 💔</button>
         </div>
+        
         <p id="response"></p>
+        <p id="click-log"></p> <!-- This will display the last clicked button -->
     </div>
 
     <script src="a.js"></script>
