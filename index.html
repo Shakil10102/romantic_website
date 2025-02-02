@@ -1,35 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Do You Love Me?</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Information</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Do you love me? ❤️</h1>
-        <p class="romantic-message">"You are the light of my life, my sunshine on a cloudy day..."</p>
-        
-        <!-- Name Input -->
-        <label for="nameInput">Enter your name:</label>
-        <input type="text" id="nameInput" placeholder="Your Name">
-        <button id="saveName">OK ✅</button>
-        
-        <p id="savedName"></p>
+  <div class="container">
+    <h1>Student Information</h1>
+    <form id="studentForm">
+      <label for="studentId">Student ID:</label>
+      <input type="text" id="studentId" name="studentId" required>
+      
+      <label for="studentName">Student Name:</label>
+      <input type="text" id="studentName" name="studentName" required>
+      
+      <button type="submit">Register</button>
+    </form>
+    <p id="message"></p>
+  </div>
 
-        <!-- Yes/No Buttons -->
-        <div class="buttons">
-            <button id="yes">Yes 💖</button>
-            <button id="no">No 💔</button>
-        </div>
-        
-        <p id="response"></p>
-    </div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script src="a.js"></script>
+  <script src="a.js" type="module"></script>
 </body>
 </html>
