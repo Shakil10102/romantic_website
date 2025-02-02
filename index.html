@@ -11,12 +11,12 @@
         <h1>Do you love me? ❤️</h1>
         <p class="romantic-message">"You are the light of my life, my sunshine on a cloudy day..."</p>
         
-        <!-- Name Input Section -->
+        <!-- Name Input -->
         <label for="nameInput">Enter your name:</label>
         <input type="text" id="nameInput" placeholder="Your Name">
         <button id="saveName">OK ✅</button>
         
-        <p id="savedName"></p> <!-- Displays the saved name -->
+        <p id="savedName"></p>
 
         <!-- Yes/No Buttons -->
         <div class="buttons">
@@ -25,9 +25,11 @@
         </div>
         
         <p id="response"></p>
-        <p id="click-log"></p> <!-- This will display the last clicked button -->
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <script src="a.js"></script>
 </body>
 </html>
