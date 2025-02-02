@@ -1,13 +1,13 @@
-// Import required functions from Firebase SDK v9+ (modular)
+// Import Firebase modules
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
-// Firebase Configuration
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCWAE4wwJ7I4nraZ34f8U7i4kGLjFHhX2I",
   authDomain: "love-c113f.firebaseapp.com",
   projectId: "love-c113f",
-  storageBucket: "love-c113f.firebasestorage.app",
+  storageBucket: "love-c113f.appspot.com",
   messagingSenderId: "131230749247",
   appId: "1:131230749247:web:a0a3bdec8286a33f691e8a",
   measurementId: "G-9Y8NT7G9Z1"
@@ -17,49 +17,45 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Save User's Name
-document.getElementById("saveName").addEventListener("click", function () {
-  let userName = document.getElementById("nameInput").value.trim();
+// DOM Elements
+const studentForm = document.getElementById("studentForm");
+const message = document.getElementById("message");
 
-  if (userName !== "") {
-    // Save the name to localStorage and display the saved name
-    localStorage.setItem("savedName", userName);
-    document.getElementById("savedName").innerHTML = "Saved Name: " + userName;
-    alert("Your name has been saved! ✅");
-  } else {
-    alert("Please enter your name! ⚠️");
-  }
-});
+// Save to Local Storage
+const saveToLocalStorage = (studentId, studentName) => {
+  const studentData = { studentId, studentName };
+  localStorage.setItem(studentId, JSON.stringify(studentData));
+};
 
-// Function to Save Yes/No Response to Firestore
-async function saveResponse(response) {
-  let userName = localStorage.getItem("savedName") || "Anonymous"; // Get the saved name from localStorage
-
+// Save to Firestore
+const saveToFirestore = async (studentId, studentName) => {
   try {
-    // Save the response in Firestore
-    await addDoc(collection(db, "responses"), {
-      name: userName,
-      answer: response,
-      timestamp: serverTimestamp() // Save the current timestamp
+    await addDoc(collection(db, "students"), {
+      studentId,
+      studentName,
     });
-    console.log("Response Saved!");
+    console.log("Data saved to Firestore");
   } catch (error) {
-    console.error("Error saving response: ", error);
+    console.error("Error saving to Firestore: ", error);
   }
-}
+};
 
-// Handle Yes Click (Display Love and Save Response)
-document.getElementById("yes").addEventListener("click", function () {
-  // Show "Love you too" message
-  document.getElementById("response").innerHTML = "Love you too ❤️";
-  // Save the response to Firestore
-  saveResponse("Yes 💖");
-});
+// Handle Form Submission
+studentForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-// Handle No Click (Display Try Again and Save Response)
-document.getElementById("no").addEventListener("click", function () {
-  // Show "Think again" message
-  document.getElementById("response").innerHTML = "Think again... 💔";
-  // Save the response to Firestore
-  saveResponse("No 💔");
+  const studentId = document.getElementById("studentId").value;
+  const studentName = document.getElementById("studentName").value;
+
+  // Save to Local Storage
+  saveToLocalStorage(studentId, studentName);
+
+  // Save to Firestore
+  await saveToFirestore(studentId, studentName);
+
+  // Display Success Message
+  message.textContent = "Registration Complete!";
+
+  // Reset Form
+  studentForm.reset();
 });
